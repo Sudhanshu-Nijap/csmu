@@ -90,6 +90,34 @@
     background: #c21a20;
 }
 
+/* ───────── Hero Silhouettes ───────── */
+.hero-silhouettes-basic {
+    position: absolute;
+    bottom: 50px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    padding: 0 40px;
+    z-index: 1;
+}
+
+.hero-figure {
+    width: 60px;
+    opacity: 0.5;
+    transition: opacity 0.3s;
+}
+
+.hero-figure:hover {
+    opacity: 0.9;
+}
+
+.hero-figure svg {
+    width: 100%;
+    height: auto;
+}
+
 /* ───────── Footer ───────── */
 .landing-footer {
     position: absolute;
