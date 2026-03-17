@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import LandingPage from './LandingPage';
 import './index.css';
 
 function App() {
+  const [showLanding, setShowLanding] = useState(true);
   const [inputText, setInputText] = useState('');
   const [translatedText, setTranslatedText] = useState('');
   const [sourceLanguage, setSourceLanguage] = useState('en');
@@ -10,17 +12,14 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
 
-  // We use Web Speech API for voice recognition
   const recognitionRef = useRef(null);
 
   useEffect(() => {
-    // Initialize Speech Recognition if supported
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition) {
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = false;
-      // Note: we can map the source language to BCP-47 if needed.
 
       recognitionRef.current.onstart = () => {
         setIsListening(true);
@@ -71,8 +70,6 @@ function App() {
       recognitionRef.current?.stop();
     } else {
       if (recognitionRef.current) {
-        // Set the recognition language based on selected source language
-        // mapping simple codes to BCP-47 roughly
         const langMap = {
           'en': 'en-US',
           'es': 'es-ES',
@@ -93,7 +90,6 @@ function App() {
 
     const utterance = new SpeechSynthesisUtterance(translatedText);
 
-    // Attempt to set a matching voice for the target language
     const voices = window.speechSynthesis.getVoices();
     const langMap = {
       'en': 'en-US',
@@ -105,7 +101,6 @@ function App() {
 
     const targetLangCode = langMap[targetLanguage] || 'en-US';
 
-    // Find a voice that matches the language
     const preferredVoice = voices.find(voice => voice.lang.includes(targetLangCode.split('-')[0]));
     if (preferredVoice) {
       utterance.voice = preferredVoice;
@@ -129,16 +124,37 @@ function App() {
     { code: 'ja', name: 'Japanese' }
   ];
 
+  if (showLanding) {
+    return <LandingPage onEnter={() => setShowLanding(false)} />;
+  }
+
   return (
     <div className="app-container">
-      <header className="header">
+      <header className="header" style={{ position: 'relative' }}>
+        <button
+          onClick={() => setShowLanding(true)}
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: '50%',
+            transform: 'translateY(-50%)',
+            background: 'transparent',
+            border: '1px solid var(--avengers-red)',
+            color: 'var(--avengers-red)',
+            padding: '8px 16px',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontFamily: 'Orbitron, sans-serif'
+          }}
+        >
+          &larr; BACK
+        </button>
         <h1 className="title">Avengers Language Learner</h1>
         <p className="subtitle">Translate across the multiverse.</p>
       </header>
 
       <main className="main-content">
         <div className="translation-area">
-          {/* Source Box */}
           <div className="box-container input-box">
             <div className="controls">
               <select
@@ -164,7 +180,6 @@ function App() {
             />
           </div>
 
-          {/* Target Box */}
           <div className="box-container output-box">
             {isLoading && <div className="loading-text">Translating...</div>}
             <div className="controls">
