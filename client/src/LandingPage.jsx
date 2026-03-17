@@ -95,7 +95,7 @@ function LandingPage({ onEnter }) {
 
             {/* Bottom bar */}
             <div className="landing-footer">
-                <span>Powered by Stark Industries</span>
+                <span>Powered by Game Of Codes</span>
             </div>
         </div>
     );

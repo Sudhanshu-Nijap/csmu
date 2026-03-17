@@ -5,6 +5,7 @@ import './index.css';
 
 function App() {
   const [showLanding, setShowLanding] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(true);
   const [inputText, setInputText] = useState('');
   const [translatedText, setTranslatedText] = useState('');
   const [sourceLanguage, setSourceLanguage] = useState('en');
@@ -13,6 +14,14 @@ function App() {
   const [isListening, setIsListening] = useState(false);
 
   const recognitionRef = useRef(null);
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.classList.remove('light-mode');
+    } else {
+      document.body.classList.add('light-mode');
+    }
+  }, [isDarkMode]);
 
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -147,7 +156,26 @@ function App() {
             fontFamily: 'Orbitron, sans-serif'
           }}
         >
-          &larr; BACK
+          BACK
+        </button>
+        <button
+          className="theme-toggle"
+          onClick={() => setIsDarkMode(!isDarkMode)}
+          style={{
+            position: 'absolute',
+            left: '80px', /* Adjust this value to position it next to the BACK button */
+            top: '50%',
+            transform: 'translateY(-50%)',
+            background: 'transparent',
+            border: '1px solid var(--avengers-red)',
+            color: 'var(--avengers-red)',
+            padding: '8px 16px',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontFamily: 'Orbitron, sans-serif'
+          }}
+        >
+          {isDarkMode ? '☀️ LIGHT' : '🌙 DARK'}
         </button>
         <h1 className="title">Avengers Language Learner</h1>
         <p className="subtitle">Translate across the multiverse.</p>
@@ -167,7 +195,7 @@ function App() {
               </select>
 
               <button className="btn-icon btn-jarvis" onClick={handleListen}>
-                🎙️ {isListening ? 'Stop' : 'Talk to JARVIS'}
+                {isListening ? 'Stop' : 'Talk to JARVIS'}
               </button>
             </div>
 
@@ -193,7 +221,7 @@ function App() {
               </select>
 
               <button className="btn-icon" onClick={swapLanguages} title="Swap Languages">
-                🔄 Swap
+                Swap
               </button>
             </div>
 
@@ -222,7 +250,7 @@ function App() {
             disabled={!translatedText}
             style={{ fontSize: '1.2rem', padding: '1rem', border: '1px solid var(--avengers-red)', background: translatedText ? 'rgba(230, 36, 41, 0.1)' : 'transparent', color: translatedText ? '#fff' : '#555' }}
           >
-            🔊 Hear Translation
+            Hear Translation
           </button>
         </div>
       </main>
